@@ -8,4 +8,4 @@ Console.WriteLine("Enter your name:");
             int zero = 0;
             int result = 10 / zero;
         }
-Console.WriteLine("Hello, Worl!");
+Console.WriteLine("Hello, World!");
