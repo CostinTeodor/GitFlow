@@ -5,7 +5,7 @@ Console.WriteLine("Enter your name:");
         if (name == "admin") // Intentional bug: crashing for a specific input
         {
             // Intentional bug: divide by zero error
-            int zero = 0;
+            int zero = 1;
             int result = 10 / zero;
         }
 Console.WriteLine("Hello, World!");
