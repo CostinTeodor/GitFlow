@@ -1,0 +1,39 @@
+name: $(Build.DefinitionName)_1.0.$(Build.BuildId).$(Rev:r)
+
+pool:
+  name: 'DevOps-Agents-VM'
+
+jobs:
+- job: Build
+  displayName: 'Build Job'
+  steps: 
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: '**/*myApp/*.csproj'
+      arguments: '-c Release'
+
+- job: Pack
+  displayName: 'Pack Job'
+  steps: 
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/*myApp/*.csproj'
+      arguments: '-c Release'
+      versioningScheme: 'off'
+
+- job: Tag
+  displayName: 'Tag Sources'
+  dependsOn: 
+  - Build
+  - Pack
+  condition: succeeded()
+  steps:
+  - checkout: self
+  - script: |
+      git tag $(Build.BuildNumber)
+      git push origin $(Build.BuildNumber)
+    displayName: 'Apply Git Tag'
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
